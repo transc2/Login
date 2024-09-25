@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Envío - TransCano</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff; /* Fondo blanco para el formulario */
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+            text-align: left;
+        }
+        header {
+            text-align: center;
+            position: relative;
+        }
+        
+        h1 {
+            color: #FFC107;
+            margin-top: 35px;
+            margin-bottom: 5px;
+        }
+        h2 {
+            color: #000;
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        .form-section {
+            margin-bottom: 20px;
+            display: flex; /* Para crear columnas */
+            flex-wrap: wrap;
+        }
+        .form-section strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            opacity: 0.1;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+        .signature-section {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .btn {
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #faca3a;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #ffca28;
+        }
+
+        #logo {
+    max-width: 120px;
+    position: relative;
+    left: 0;
+    top: 0;
+}
+
+input {
+    width: calc(33.33% - 10px); /* Tres columnas */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #faca3a;
+    border-radius: 3px;
+}
+
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            #logo {
+                max-width: 100px;
+            }
+            h1 {
+                font-size: 22px;
+            }
+            h2 {
+                font-size: 16px;
+            }
+
+            input {
+        width: calc(100% - 20px); /* Para móviles */
+    }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <img src="logo.jpg" alt="Logo de la Empresa" id="logo">
+        <h1>Importadora TransCano</h1>
+        <h2>Venta de maquinaria y servicios mecánicos</h2>
+    </header>
+
+    <img src="logo.jpg" class="watermark" alt="Marca de Agua">
+    
+    <!-- Formulario sin tabla -->
+    <div class="form-section">
+        <div style="flex: 1; margin-right: 10px;">
+            <strong>Procedencia:</strong>
+            <input type="text" placeholder="Procedencia" required>
+        </div>
+        <div style="flex: 1;">
+            <strong>Destino:</strong>
+            <input type="text" placeholder="Destino" required>
+        </div>
+    </div>
+    
+    <div class="form-section">
+        <div style="flex: 1; margin-right: 10px;">
+            <strong>Encargado de Envío:</strong>
+            <input type="text" placeholder="Encargado de envío" required>
+        </div>
+        <div style="flex: 1;">
+            <strong>Empresa:</strong>
+            <input type="text" placeholder="Empresa" required>
+        </div>
+    </div>
+    
+    <div class="form-section">
+        <div style="flex: 1; margin-right: 10px;">
+            <strong>Número de Identificación:</strong>
+            <input type="text" placeholder="Número de identificación" required>
+        </div>
+        <div style="flex: 1;">
+            <strong>Fecha:</strong>
+            <input type="date" required>
+        </div>
+    </div>
+
+    <div class="section"></div>
+        <h3 class="section-title">DATOS DE MAQUINARIA</h3>
+        <div class="field">
+            <input type="text" placeholder="Nombre" required>
+            <input type="text" placeholder="Marca" required>
+        </div>
+        <div class="field">
+            <input type="text" placeholder="Modelo" required>
+            <input type="text" placeholder="Chasis" required>
+        </div>
+        <div class="field">
+            <input type="text" placeholder="Color" required>
+            <input type="text" placeholder="Tipo" required>
+        </div>
+
+    <div class="form-section">
+        <strong>Datos de Camión:</strong>
+        <input type="text" placeholder="Placa" required>
+        <input type="text" placeholder="Marca" required>
+        <input type="text" placeholder="Modelo" required>
+        <input type="text" placeholder="Motor" required>
+    </div>
+
+    <div class="signature-section">
+        <p><strong>Firma del Encargado:</strong></p>
+        <span>__________________________</span>
+    </div>
+
+    <div class="actions">
+        <button class="btn" onclick="downloadPDF()">Descargar PDF</button>
+        <button class="btn" onclick="window.location.href='index.html'">Regresar al Menú</button>
+    </div>
+</div>
+
+<script>
+    async function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+        unit: 'mm',
+        format: 'a4'
+    });
+    const container = document.querySelector('.container');
+    
+    const botones = document.querySelectorAll(".btn");
+    botones.forEach(boton => boton.style.display = 'none'); // Ocultar botones
+
+    try {
+        const canvas = await html2canvas(container, { scale: 1.5 });
+        const imgData = canvas.toDataURL('image/png');
+
+        const imgWidth = 110; // Ajuste de ancho
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+        const posX = (210 - imgWidth) / 2; // Centrar horizontalmente
+        const posY = (280 - imgHeight) / 2; // Centrar verticalmente
+        doc.addImage(imgData, 'PNG', posX, posY, imgWidth, imgHeight);
+        doc.save('guia_de_envio.pdf');
+    } catch (error) {
+        console.error('Error al generar el PDF:', error);
+    } finally {
+        botones.forEach(boton => boton.style.display = 'block');
+    }
+}
+</script>
+</body>
+</html>
+
+
+
+
